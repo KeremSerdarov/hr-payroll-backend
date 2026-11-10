@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Database\Factories\EmployeeFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable(['user_id', 'department_id', 'position', 'base_salary', 'hired_at'])]
 class Employee extends Model
 {
+    /** @use HasFactory<EmployeeFactory> */
+    use HasFactory;
+
     protected function casts(): array
     {
         return ['hired_at' => 'date', 'base_salary' => 'decimal:2'];
