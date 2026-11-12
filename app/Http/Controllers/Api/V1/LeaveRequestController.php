@@ -21,7 +21,7 @@ class LeaveRequestController extends Controller
     {
         // Işgär ID-si body-dan alynmaýar; diňe tokeniň eýesine ýazylýar.
         $leaveRequest = $request->user()->employee->leaveRequests()->create($request->validated());
-
+        $leaveRequest->refresh();
         return LeaveRequestResource::make($leaveRequest)->response()->setStatusCode(201);
     }
 }
