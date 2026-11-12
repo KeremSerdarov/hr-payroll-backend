@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\LoginRequest;
-use App\Http\Resources\EmployeeResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -24,14 +23,11 @@ class AuthController extends Controller
             ]);
         }
 
-        abort_unless($user->role === 'employee', 403, 'Bu API diňe işgärler üçin.');
-
-        $employee = $user->employee()->with(['user', 'department'])->firstOrFail();
-        $token = $user->createToken('employee-api')->plainTextToken;
+        $token = $user->createToken('api')->plainTextToken;
 
         return response()->json([
             'token' => $token,
-            'employee' => EmployeeResource::make($employee)->resolve($request),
+            'user' => ['id' => $user->id, 'name' => $user->name, 'email' => $user->email, 'role' => $user->role],
         ]);
     }
 
@@ -48,8 +44,7 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        $employee = $request->user()->employee()->with(['user', 'department'])->firstOrFail();
-
-        return EmployeeResource::make($employee);
+        $user = $request->user();
+        return response()->json(['id' => $user->id, 'name' => $user->name, 'email' => $user->email, 'role' => $user->role]);
     }
 }

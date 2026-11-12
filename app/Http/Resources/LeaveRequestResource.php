@@ -16,6 +16,7 @@ class LeaveRequestResource extends JsonResource
             'reason' => $this->reason,
             'status' => $this->status,
             'admin_comment' => $this->admin_comment,
+            'employee' => $this->whenLoaded('employee', fn () => ['id' => $this->employee->id, 'name' => $this->employee->user->name, 'email' => $this->employee->user->email]),
         ];
     }
 }
